@@ -38,9 +38,16 @@ export class MongoStorage implements IStorage {
     }
   }
 
+  private async ensureConnection() {
+    if (!this.isConnected) {
+      await this.initConnection();
+    }
+  }
+
   // User methods
   async getUser(id: string): Promise<User | undefined> {
     try {
+      await this.ensureConnection();
       const user = await UserModel.findById(id);
       if (!user) return undefined;
       
@@ -59,6 +66,7 @@ export class MongoStorage implements IStorage {
 
   async getUserByUsername(username: string): Promise<User | undefined> {
     try {
+      await this.ensureConnection();
       const user = await UserModel.findOne({ username });
       if (!user) return undefined;
       
@@ -77,6 +85,7 @@ export class MongoStorage implements IStorage {
 
   async getUserByEmail(email: string): Promise<User | undefined> {
     try {
+      await this.ensureConnection();
       const user = await UserModel.findOne({ email });
       if (!user) return undefined;
       
@@ -95,6 +104,7 @@ export class MongoStorage implements IStorage {
 
   async createUser(insertUser: InsertUser): Promise<User> {
     try {
+      await this.ensureConnection();
       const user = new UserModel(insertUser);
       const savedUser = await user.save();
       
@@ -114,6 +124,7 @@ export class MongoStorage implements IStorage {
   // Post methods
   async getAllPosts(): Promise<(Post & { author: User })[]> {
     try {
+      await this.ensureConnection();
       const posts = await PostModel.find().populate("authorId").sort({ createdAt: -1 });
       
       return posts.map(post => ({
@@ -140,6 +151,7 @@ export class MongoStorage implements IStorage {
 
   async getPost(id: string): Promise<(Post & { author: User }) | undefined> {
     try {
+      await this.ensureConnection();
       const post = await PostModel.findById(id).populate("authorId");
       if (!post) return undefined;
       
@@ -167,6 +179,7 @@ export class MongoStorage implements IStorage {
 
   async getPostsByAuthor(authorId: string): Promise<Post[]> {
     try {
+      await this.ensureConnection();
       const posts = await PostModel.find({ authorId }).sort({ createdAt: -1 });
       
       return posts.map(post => ({
@@ -186,6 +199,7 @@ export class MongoStorage implements IStorage {
 
   async createPost(insertPost: InsertPost): Promise<Post> {
     try {
+      await this.ensureConnection();
       const post = new PostModel(insertPost);
       const savedPost = await post.save();
       
@@ -206,6 +220,7 @@ export class MongoStorage implements IStorage {
 
   async updatePost(id: string, updates: Partial<InsertPost>): Promise<Post | undefined> {
     try {
+      await this.ensureConnection();
       const post = await PostModel.findByIdAndUpdate(
         id,
         { ...updates, updatedAt: new Date() },
@@ -231,6 +246,7 @@ export class MongoStorage implements IStorage {
 
   async deletePost(id: string): Promise<boolean> {
     try {
+      await this.ensureConnection();
       const result = await PostModel.findByIdAndDelete(id);
       return result !== null;
     } catch (error) {
@@ -241,6 +257,7 @@ export class MongoStorage implements IStorage {
 
   async updatePostVotes(id: string, votes: number): Promise<Post | undefined> {
     try {
+      await this.ensureConnection();
       const post = await PostModel.findByIdAndUpdate(
         id,
         { votes, updatedAt: new Date() },
