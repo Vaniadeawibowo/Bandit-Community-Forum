@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation } from "wouter";
+import { Plus } from "lucide-react";
 import { RootState, AppDispatch } from "../store/store";
 import { checkAuth } from "../store/authSlice";
 import { fetchPosts } from "../store/postsSlice";
@@ -76,41 +77,41 @@ export default function Home() {
                 <h3 className="text-lg font-semibold mb-3 text-foreground">Create a post</h3>
                 <button
                   onClick={() => setIsCreateModalOpen(true)}
-                  className="w-full bg-reddit-orange text-white py-2 rounded-lg hover:bg-orange-600 transition-colors"
+                  className="w-full bg-reddit-orange text-white py-2 rounded-lg hover:bg-orange-600 transition-colors flex items-center justify-center gap-2"
                 >
-                  <i className="fas fa-plus mr-2"></i>Create Post
+                  <Plus size={16} />Create Post
                 </button>
               </div>
 
               {/* Popular Communities */}
-              <div className="bg-white rounded-lg border border-reddit-border p-4">
-                <h3 className="text-lg font-semibold mb-3">Popular Communities</h3>
+              <div className="bg-card rounded-lg border border-reddit-border p-4">
+                <h3 className="text-lg font-semibold mb-3 text-foreground">Popular Communities</h3>
                 <div className="space-y-2">
-                  <div className="flex items-center space-x-2 p-2 hover:bg-reddit-light-gray rounded-lg cursor-pointer">
+                  <div className="flex items-center space-x-2 p-2 hover:bg-muted rounded-lg cursor-pointer">
                     <div className="w-8 h-8 bg-reddit-orange rounded-full flex items-center justify-center">
                       <span className="text-white text-xs font-bold">P</span>
                     </div>
                     <div className="flex-1">
-                      <p className="text-sm font-medium">b/programming</p>
-                      <p className="text-xs text-reddit-gray">2.1M members</p>
+                      <p className="text-sm font-medium text-foreground">b/programming</p>
+                      <p className="text-xs text-muted-foreground">2.1M members</p>
                     </div>
                   </div>
-                  <div className="flex items-center space-x-2 p-2 hover:bg-reddit-light-gray rounded-lg cursor-pointer">
+                  <div className="flex items-center space-x-2 p-2 hover:bg-muted rounded-lg cursor-pointer">
                     <div className="w-8 h-8 bg-reddit-blue rounded-full flex items-center justify-center">
                       <span className="text-white text-xs font-bold">J</span>
                     </div>
                     <div className="flex-1">
-                      <p className="text-sm font-medium">b/javascript</p>
-                      <p className="text-xs text-reddit-gray">1.8M members</p>
+                      <p className="text-sm font-medium text-foreground">b/javascript</p>
+                      <p className="text-xs text-muted-foreground">1.8M members</p>
                     </div>
                   </div>
-                  <div className="flex items-center space-x-2 p-2 hover:bg-reddit-light-gray rounded-lg cursor-pointer">
+                  <div className="flex items-center space-x-2 p-2 hover:bg-muted rounded-lg cursor-pointer">
                     <div className="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center">
                       <span className="text-white text-xs font-bold">W</span>
                     </div>
                     <div className="flex-1">
-                      <p className="text-sm font-medium">b/webdev</p>
-                      <p className="text-xs text-reddit-gray">1.3M members</p>
+                      <p className="text-sm font-medium text-foreground">b/webdev</p>
+                      <p className="text-xs text-muted-foreground">1.3M members</p>
                     </div>
                   </div>
                 </div>

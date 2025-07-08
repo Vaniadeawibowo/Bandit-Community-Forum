@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
+import { Image, Link } from "lucide-react";
 
 interface Post {
   id: string;
@@ -99,16 +100,16 @@ export default function CreatePostModal({ isOpen, onClose, editPost }: CreatePos
           <div className="flex items-center space-x-4">
             <button
               type="button"
-              className="flex items-center space-x-2 px-4 py-2 border border-reddit-border rounded-lg hover:bg-reddit-light-gray transition-colors"
+              className="flex items-center space-x-2 px-4 py-2 border border-reddit-border rounded-lg hover:bg-muted transition-colors"
             >
-              <i className="fas fa-image text-reddit-gray"></i>
+              <Image size={16} className="text-muted-foreground" />
               <span className="text-sm">Add Image</span>
             </button>
             <button
               type="button"
-              className="flex items-center space-x-2 px-4 py-2 border border-reddit-border rounded-lg hover:bg-reddit-light-gray transition-colors"
+              className="flex items-center space-x-2 px-4 py-2 border border-reddit-border rounded-lg hover:bg-muted transition-colors"
             >
-              <i className="fas fa-link text-reddit-gray"></i>
+              <Link size={16} className="text-muted-foreground" />
               <span className="text-sm">Add Link</span>
             </button>
           </div>

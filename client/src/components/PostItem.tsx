@@ -3,6 +3,7 @@ import { useDispatch } from "react-redux";
 import { AppDispatch } from "../store/store";
 import { deletePost, votePost } from "../store/postsSlice";
 import { Button } from "@/components/ui/button";
+import { ArrowUp, ArrowDown, MessageCircle, Share, Bookmark, Edit, Trash2 } from "lucide-react";
 import CreatePostModal from "./CreatePostModal";
 
 interface User {
@@ -69,22 +70,22 @@ export default function PostItem({ post, currentUser }: PostItemProps) {
             <div className="flex flex-col items-center space-y-1 min-w-0">
               <button
                 onClick={handleUpvote}
-                className="text-reddit-gray hover:text-reddit-orange transition-colors"
+                className="text-muted-foreground hover:text-reddit-orange transition-colors"
               >
-                <i className="fas fa-arrow-up text-lg"></i>
+                <ArrowUp size={18} />
               </button>
               <span className="text-sm font-medium text-foreground">{post.votes}</span>
               <button
                 onClick={handleDownvote}
-                className="text-reddit-gray hover:text-reddit-blue transition-colors"
+                className="text-muted-foreground hover:text-reddit-blue transition-colors"
               >
-                <i className="fas fa-arrow-down text-lg"></i>
+                <ArrowDown size={18} />
               </button>
             </div>
 
             {/* Post Content */}
             <div className="flex-1 min-w-0">
-              <div className="flex items-center space-x-2 text-xs text-reddit-gray mb-2">
+              <div className="flex items-center space-x-2 text-xs text-muted-foreground mb-2">
                 <span>b/programming</span>
                 <span>•</span>
                 <span>Posted by</span>
@@ -94,20 +95,20 @@ export default function PostItem({ post, currentUser }: PostItemProps) {
               <h3 className="text-lg font-medium text-foreground mb-2 cursor-pointer hover:text-reddit-blue">
                 {post.title}
               </h3>
-              <p className="text-reddit-gray text-sm mb-3">
+              <p className="text-muted-foreground text-sm mb-3">
                 {getSnippet(post.content)}
               </p>
               <div className="flex items-center space-x-4">
-                <button className="flex items-center space-x-1 text-reddit-gray hover:text-foreground transition-colors">
-                  <i className="far fa-comment text-sm"></i>
+                <button className="flex items-center space-x-1 text-muted-foreground hover:text-foreground transition-colors">
+                  <MessageCircle size={14} />
                   <span className="text-sm">0 comments</span>
                 </button>
-                <button className="flex items-center space-x-1 text-reddit-gray hover:text-foreground transition-colors">
-                  <i className="fas fa-share text-sm"></i>
+                <button className="flex items-center space-x-1 text-muted-foreground hover:text-foreground transition-colors">
+                  <Share size={14} />
                   <span className="text-sm">Share</span>
                 </button>
-                <button className="flex items-center space-x-1 text-reddit-gray hover:text-foreground transition-colors">
-                  <i className="far fa-bookmark text-sm"></i>
+                <button className="flex items-center space-x-1 text-muted-foreground hover:text-foreground transition-colors">
+                  <Bookmark size={14} />
                   <span className="text-sm">Save</span>
                 </button>
                 
@@ -116,15 +117,15 @@ export default function PostItem({ post, currentUser }: PostItemProps) {
                   <div className="flex items-center space-x-2 ml-auto">
                     <button
                       onClick={() => setIsEditModalOpen(true)}
-                      className="text-reddit-gray hover:text-reddit-blue transition-colors"
+                      className="text-muted-foreground hover:text-reddit-blue transition-colors"
                     >
-                      <i className="fas fa-edit text-sm"></i>
+                      <Edit size={14} />
                     </button>
                     <button
                       onClick={handleDelete}
-                      className="text-reddit-gray hover:text-red-600 transition-colors"
+                      className="text-muted-foreground hover:text-red-600 transition-colors"
                     >
-                      <i className="fas fa-trash text-sm"></i>
+                      <Trash2 size={14} />
                     </button>
                   </div>
                 )}

@@ -56,6 +56,7 @@ export class MongoStorage implements IStorage {
       
       return {
         _id: user._id.toString(),
+        id: user._id.toString(),
         username: user.username,
         password: user.password,
         email: user.email,
@@ -75,6 +76,7 @@ export class MongoStorage implements IStorage {
       
       return {
         _id: user._id.toString(),
+        id: user._id.toString(),
         username: user.username,
         password: user.password,
         email: user.email,
@@ -94,6 +96,7 @@ export class MongoStorage implements IStorage {
       
       return {
         _id: user._id.toString(),
+        id: user._id.toString(),
         username: user.username,
         password: user.password,
         email: user.email,
@@ -113,6 +116,7 @@ export class MongoStorage implements IStorage {
       
       return {
         _id: savedUser._id.toString(),
+        id: savedUser._id.toString(),
         username: savedUser.username,
         password: savedUser.password,
         email: savedUser.email,
@@ -132,6 +136,7 @@ export class MongoStorage implements IStorage {
       
       return posts.map(post => ({
         _id: post._id.toString(),
+        id: post._id.toString(),
         title: post.title,
         content: post.content,
         authorId: post.authorId._id.toString(),
@@ -140,6 +145,7 @@ export class MongoStorage implements IStorage {
         updatedAt: post.updatedAt,
         author: {
           _id: post.authorId._id.toString(),
+          id: post.authorId._id.toString(),
           username: post.authorId.username,
           password: post.authorId.password,
           email: post.authorId.email,
@@ -160,6 +166,7 @@ export class MongoStorage implements IStorage {
       
       return {
         _id: post._id.toString(),
+        id: post._id.toString(),
         title: post.title,
         content: post.content,
         authorId: post.authorId._id.toString(),
@@ -168,6 +175,7 @@ export class MongoStorage implements IStorage {
         updatedAt: post.updatedAt,
         author: {
           _id: post.authorId._id.toString(),
+          id: post.authorId._id.toString(),
           username: post.authorId.username,
           password: post.authorId.password,
           email: post.authorId.email,
@@ -187,6 +195,7 @@ export class MongoStorage implements IStorage {
       
       return posts.map(post => ({
         _id: post._id.toString(),
+        id: post._id.toString(),
         title: post.title,
         content: post.content,
         authorId: post.authorId.toString(),
@@ -208,6 +217,7 @@ export class MongoStorage implements IStorage {
       
       return {
         _id: savedPost._id.toString(),
+        id: savedPost._id.toString(),
         title: savedPost.title,
         content: savedPost.content,
         authorId: savedPost.authorId.toString(),
@@ -234,6 +244,7 @@ export class MongoStorage implements IStorage {
       
       return {
         _id: post._id.toString(),
+        id: post._id.toString(),
         title: post.title,
         content: post.content,
         authorId: post.authorId.toString(),
@@ -271,6 +282,7 @@ export class MongoStorage implements IStorage {
       
       return {
         _id: post._id.toString(),
+        id: post._id.toString(),
         title: post.title,
         content: post.content,
         authorId: post.authorId.toString(),

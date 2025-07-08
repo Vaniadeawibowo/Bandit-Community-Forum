@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button";
+import { Search, Plus, ChevronDown } from "lucide-react";
 
 interface User {
   id: string;
@@ -23,24 +24,26 @@ export default function Header({ user, onCreatePost, onProfileClick }: HeaderPro
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-4">
             <div className="flex items-center space-x-2">
-              <i className="fab fa-reddit-alien text-reddit-orange text-2xl"></i>
+              <div className="w-8 h-8 bg-reddit-orange rounded-full flex items-center justify-center">
+                <span className="text-white font-bold text-lg">B</span>
+              </div>
               <span className="text-xl font-bold text-foreground">Banddit</span>
             </div>
-            <div className="hidden md:flex bg-input rounded-lg px-4 py-2 w-96">
-              <i className="fas fa-search text-reddit-gray mr-2 mt-1"></i>
+            <div className="hidden md:flex bg-input rounded-lg px-4 py-2 w-96 items-center">
+              <Search size={16} className="text-muted-foreground mr-2" />
               <input
                 type="text"
                 placeholder="Search Banddit"
-                className="bg-transparent outline-none flex-1 text-foreground placeholder:text-reddit-gray"
+                className="bg-transparent outline-none flex-1 text-foreground placeholder:text-muted-foreground"
               />
             </div>
           </div>
           <div className="flex items-center space-x-4">
             <Button
               onClick={onCreatePost}
-              className="bg-reddit-orange text-white hover:bg-orange-600 rounded-full"
+              className="bg-reddit-orange text-white hover:bg-orange-600 rounded-full flex items-center gap-2"
             >
-              <i className="fas fa-plus mr-2"></i>Create Post
+              <Plus size={16} />Create Post
             </Button>
             <div className="relative">
               <button
@@ -55,7 +58,7 @@ export default function Header({ user, onCreatePost, onProfileClick }: HeaderPro
                 <span className="hidden md:block text-sm font-medium text-foreground">
                   {user.username}
                 </span>
-                <i className="fas fa-chevron-down text-xs text-reddit-gray"></i>
+                <ChevronDown size={12} className="text-muted-foreground" />
               </button>
             </div>
           </div>
