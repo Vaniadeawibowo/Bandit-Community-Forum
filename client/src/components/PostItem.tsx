@@ -6,16 +6,16 @@ import { Button } from "@/components/ui/button";
 import CreatePostModal from "./CreatePostModal";
 
 interface User {
-  id: number;
+  id: string;
   username: string;
   email: string;
 }
 
 interface Post {
-  id: number;
+  id: string;
   title: string;
   content: string;
-  authorId: number;
+  authorId: string;
   votes: number;
   createdAt: string;
   updatedAt: string;

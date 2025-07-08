@@ -2,7 +2,7 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { apiRequest } from "../lib/queryClient";
 
 interface User {
-  id: number;
+  id: string;
   username: string;
   email: string;
 }

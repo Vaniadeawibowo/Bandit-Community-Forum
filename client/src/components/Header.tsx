@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 
 interface User {
-  id: number;
+  id: string;
   username: string;
   email: string;
 }

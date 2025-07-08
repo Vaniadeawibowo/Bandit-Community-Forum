@@ -60,12 +60,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
       });
 
       // Generate JWT token
-      const token = jwt.sign({ userId: user.id, username: user.username }, JWT_SECRET, {
+      const token = jwt.sign({ userId: user._id, username: user.username }, JWT_SECRET, {
         expiresIn: "24h",
       });
 
       res.json({
-        user: { id: user.id, username: user.username, email: user.email },
+        user: { id: user._id, username: user.username, email: user.email },
         token,
       });
     } catch (error) {
@@ -89,12 +89,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
 
       // Generate JWT token
-      const token = jwt.sign({ userId: user.id, username: user.username }, JWT_SECRET, {
+      const token = jwt.sign({ userId: user._id, username: user.username }, JWT_SECRET, {
         expiresIn: "24h",
       });
 
       res.json({
-        user: { id: user.id, username: user.username, email: user.email },
+        user: { id: user._id, username: user.username, email: user.email },
         token,
       });
     } catch (error) {
@@ -109,7 +109,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(404).json({ message: "User not found" });
       }
 
-      res.json({ id: user.id, username: user.username, email: user.email });
+      res.json({ id: user._id, username: user.username, email: user.email });
     } catch (error) {
       res.status(500).json({ message: "Internal server error" });
     }
@@ -127,7 +127,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.get("/api/posts/:id", async (req, res) => {
     try {
-      const id = parseInt(req.params.id);
+      const id = req.params.id;
       const post = await storage.getPost(id);
       
       if (!post) {
@@ -148,7 +148,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       });
 
       const post = await storage.createPost(validatedData);
-      const postWithAuthor = await storage.getPost(post.id);
+      const postWithAuthor = await storage.getPost(post._id);
       
       res.status(201).json(postWithAuthor);
     } catch (error) {
@@ -158,7 +158,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.put("/api/posts/:id", authenticateToken, async (req, res) => {
     try {
-      const id = parseInt(req.params.id);
+      const id = req.params.id;
       const post = await storage.getPost(id);
       
       if (!post) {
@@ -181,7 +181,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.delete("/api/posts/:id", authenticateToken, async (req, res) => {
     try {
-      const id = parseInt(req.params.id);
+      const id = req.params.id;
       const post = await storage.getPost(id);
       
       if (!post) {
@@ -201,7 +201,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.post("/api/posts/:id/vote", authenticateToken, async (req, res) => {
     try {
-      const id = parseInt(req.params.id);
+      const id = req.params.id;
       const { votes } = req.body;
       
       const updatedPost = await storage.updatePostVotes(id, votes);

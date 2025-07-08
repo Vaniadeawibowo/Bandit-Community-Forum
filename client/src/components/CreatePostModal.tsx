@@ -9,15 +9,15 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 
 interface Post {
-  id: number;
+  id: string;
   title: string;
   content: string;
-  authorId: number;
+  authorId: string;
   votes: number;
   createdAt: string;
   updatedAt: string;
   author: {
-    id: number;
+    id: string;
     username: string;
     email: string;
   };

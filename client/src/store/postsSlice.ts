@@ -2,16 +2,16 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { apiRequest } from "../lib/queryClient";
 
 interface User {
-  id: number;
+  id: string;
   username: string;
   email: string;
 }
 
 interface Post {
-  id: number;
+  id: string;
   title: string;
   content: string;
-  authorId: number;
+  authorId: string;
   votes: number;
   createdAt: string;
   updatedAt: string;
@@ -59,7 +59,7 @@ export const createPost = createAsyncThunk(
 
 export const updatePost = createAsyncThunk(
   "posts/updatePost",
-  async ({ id, ...postData }: { id: number; title: string; content: string }) => {
+  async ({ id, ...postData }: { id: string; title: string; content: string }) => {
     const token = localStorage.getItem("token");
     const response = await fetch(`/api/posts/${id}`, {
       method: "PUT",
@@ -80,7 +80,7 @@ export const updatePost = createAsyncThunk(
 
 export const deletePost = createAsyncThunk(
   "posts/deletePost",
-  async (id: number) => {
+  async (id: string) => {
     const token = localStorage.getItem("token");
     const response = await fetch(`/api/posts/${id}`, {
       method: "DELETE",
@@ -99,7 +99,7 @@ export const deletePost = createAsyncThunk(
 
 export const votePost = createAsyncThunk(
   "posts/votePost",
-  async ({ id, votes }: { id: number; votes: number }) => {
+  async ({ id, votes }: { id: string; votes: number }) => {
     const token = localStorage.getItem("token");
     const response = await fetch(`/api/posts/${id}/vote`, {
       method: "POST",

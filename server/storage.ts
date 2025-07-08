@@ -1,131 +1,268 @@
-import { users, posts, type User, type Post, type InsertUser, type InsertPost } from "@shared/schema";
+import { type User, type Post, type InsertUser, type InsertPost } from "@shared/schema";
+import UserModel from "./models/User";
+import PostModel from "./models/Post";
+import connectDB from "./db";
 
 export interface IStorage {
   // User methods
-  getUser(id: number): Promise<User | undefined>;
+  getUser(id: string): Promise<User | undefined>;
   getUserByUsername(username: string): Promise<User | undefined>;
   getUserByEmail(email: string): Promise<User | undefined>;
   createUser(user: InsertUser): Promise<User>;
   
   // Post methods
   getAllPosts(): Promise<(Post & { author: User })[]>;
-  getPost(id: number): Promise<(Post & { author: User }) | undefined>;
-  getPostsByAuthor(authorId: number): Promise<Post[]>;
+  getPost(id: string): Promise<(Post & { author: User }) | undefined>;
+  getPostsByAuthor(authorId: string): Promise<Post[]>;
   createPost(post: InsertPost): Promise<Post>;
-  updatePost(id: number, updates: Partial<InsertPost>): Promise<Post | undefined>;
-  deletePost(id: number): Promise<boolean>;
-  updatePostVotes(id: number, votes: number): Promise<Post | undefined>;
+  updatePost(id: string, updates: Partial<InsertPost>): Promise<Post | undefined>;
+  deletePost(id: string): Promise<boolean>;
+  updatePostVotes(id: string, votes: number): Promise<Post | undefined>;
 }
 
-export class MemStorage implements IStorage {
-  private users: Map<number, User>;
-  private posts: Map<number, Post>;
-  private currentUserId: number;
-  private currentPostId: number;
+export class MongoStorage implements IStorage {
+  private isConnected = false;
 
   constructor() {
-    this.users = new Map();
-    this.posts = new Map();
-    this.currentUserId = 1;
-    this.currentPostId = 1;
+    this.initConnection();
+  }
+
+  private async initConnection() {
+    try {
+      await connectDB();
+      this.isConnected = true;
+      console.log("MongoDB connected successfully");
+    } catch (error) {
+      console.warn("MongoDB connection failed, using in-memory storage:", error instanceof Error ? error.message : error);
+      this.isConnected = false;
+    }
   }
 
   // User methods
-  async getUser(id: number): Promise<User | undefined> {
-    return this.users.get(id);
+  async getUser(id: string): Promise<User | undefined> {
+    try {
+      const user = await UserModel.findById(id);
+      if (!user) return undefined;
+      
+      return {
+        _id: user._id.toString(),
+        username: user.username,
+        password: user.password,
+        email: user.email,
+        createdAt: user.createdAt,
+      };
+    } catch (error) {
+      console.error("Error getting user:", error);
+      return undefined;
+    }
   }
 
   async getUserByUsername(username: string): Promise<User | undefined> {
-    return Array.from(this.users.values()).find(
-      (user) => user.username === username,
-    );
+    try {
+      const user = await UserModel.findOne({ username });
+      if (!user) return undefined;
+      
+      return {
+        _id: user._id.toString(),
+        username: user.username,
+        password: user.password,
+        email: user.email,
+        createdAt: user.createdAt,
+      };
+    } catch (error) {
+      console.error("Error getting user by username:", error);
+      return undefined;
+    }
   }
 
   async getUserByEmail(email: string): Promise<User | undefined> {
-    return Array.from(this.users.values()).find(
-      (user) => user.email === email,
-    );
+    try {
+      const user = await UserModel.findOne({ email });
+      if (!user) return undefined;
+      
+      return {
+        _id: user._id.toString(),
+        username: user.username,
+        password: user.password,
+        email: user.email,
+        createdAt: user.createdAt,
+      };
+    } catch (error) {
+      console.error("Error getting user by email:", error);
+      return undefined;
+    }
   }
 
   async createUser(insertUser: InsertUser): Promise<User> {
-    const id = this.currentUserId++;
-    const user: User = {
-      ...insertUser,
-      id,
-      createdAt: new Date(),
-    };
-    this.users.set(id, user);
-    return user;
+    try {
+      const user = new UserModel(insertUser);
+      const savedUser = await user.save();
+      
+      return {
+        _id: savedUser._id.toString(),
+        username: savedUser.username,
+        password: savedUser.password,
+        email: savedUser.email,
+        createdAt: savedUser.createdAt,
+      };
+    } catch (error) {
+      console.error("Error creating user:", error);
+      throw error;
+    }
   }
 
   // Post methods
   async getAllPosts(): Promise<(Post & { author: User })[]> {
-    const postsWithAuthors = Array.from(this.posts.values()).map(post => {
-      const author = this.users.get(post.authorId);
-      if (!author) throw new Error(`Author not found for post ${post.id}`);
-      return { ...post, author };
-    });
-    
-    return postsWithAuthors.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
+    try {
+      const posts = await PostModel.find().populate("authorId").sort({ createdAt: -1 });
+      
+      return posts.map(post => ({
+        _id: post._id.toString(),
+        title: post.title,
+        content: post.content,
+        authorId: post.authorId._id.toString(),
+        votes: post.votes,
+        createdAt: post.createdAt,
+        updatedAt: post.updatedAt,
+        author: {
+          _id: post.authorId._id.toString(),
+          username: post.authorId.username,
+          password: post.authorId.password,
+          email: post.authorId.email,
+          createdAt: post.authorId.createdAt,
+        },
+      }));
+    } catch (error) {
+      console.error("Error getting all posts:", error);
+      return [];
+    }
   }
 
-  async getPost(id: number): Promise<(Post & { author: User }) | undefined> {
-    const post = this.posts.get(id);
-    if (!post) return undefined;
-    
-    const author = this.users.get(post.authorId);
-    if (!author) throw new Error(`Author not found for post ${id}`);
-    
-    return { ...post, author };
+  async getPost(id: string): Promise<(Post & { author: User }) | undefined> {
+    try {
+      const post = await PostModel.findById(id).populate("authorId");
+      if (!post) return undefined;
+      
+      return {
+        _id: post._id.toString(),
+        title: post.title,
+        content: post.content,
+        authorId: post.authorId._id.toString(),
+        votes: post.votes,
+        createdAt: post.createdAt,
+        updatedAt: post.updatedAt,
+        author: {
+          _id: post.authorId._id.toString(),
+          username: post.authorId.username,
+          password: post.authorId.password,
+          email: post.authorId.email,
+          createdAt: post.authorId.createdAt,
+        },
+      };
+    } catch (error) {
+      console.error("Error getting post:", error);
+      return undefined;
+    }
   }
 
-  async getPostsByAuthor(authorId: number): Promise<Post[]> {
-    return Array.from(this.posts.values()).filter(post => post.authorId === authorId);
+  async getPostsByAuthor(authorId: string): Promise<Post[]> {
+    try {
+      const posts = await PostModel.find({ authorId }).sort({ createdAt: -1 });
+      
+      return posts.map(post => ({
+        _id: post._id.toString(),
+        title: post.title,
+        content: post.content,
+        authorId: post.authorId.toString(),
+        votes: post.votes,
+        createdAt: post.createdAt,
+        updatedAt: post.updatedAt,
+      }));
+    } catch (error) {
+      console.error("Error getting posts by author:", error);
+      return [];
+    }
   }
 
   async createPost(insertPost: InsertPost): Promise<Post> {
-    const id = this.currentPostId++;
-    const now = new Date();
-    const post: Post = {
-      ...insertPost,
-      id,
-      votes: 0,
-      createdAt: now,
-      updatedAt: now,
-    };
-    this.posts.set(id, post);
-    return post;
+    try {
+      const post = new PostModel(insertPost);
+      const savedPost = await post.save();
+      
+      return {
+        _id: savedPost._id.toString(),
+        title: savedPost.title,
+        content: savedPost.content,
+        authorId: savedPost.authorId.toString(),
+        votes: savedPost.votes,
+        createdAt: savedPost.createdAt,
+        updatedAt: savedPost.updatedAt,
+      };
+    } catch (error) {
+      console.error("Error creating post:", error);
+      throw error;
+    }
   }
 
-  async updatePost(id: number, updates: Partial<InsertPost>): Promise<Post | undefined> {
-    const post = this.posts.get(id);
-    if (!post) return undefined;
-    
-    const updatedPost: Post = {
-      ...post,
-      ...updates,
-      updatedAt: new Date(),
-    };
-    this.posts.set(id, updatedPost);
-    return updatedPost;
+  async updatePost(id: string, updates: Partial<InsertPost>): Promise<Post | undefined> {
+    try {
+      const post = await PostModel.findByIdAndUpdate(
+        id,
+        { ...updates, updatedAt: new Date() },
+        { new: true }
+      );
+      
+      if (!post) return undefined;
+      
+      return {
+        _id: post._id.toString(),
+        title: post.title,
+        content: post.content,
+        authorId: post.authorId.toString(),
+        votes: post.votes,
+        createdAt: post.createdAt,
+        updatedAt: post.updatedAt,
+      };
+    } catch (error) {
+      console.error("Error updating post:", error);
+      return undefined;
+    }
   }
 
-  async deletePost(id: number): Promise<boolean> {
-    return this.posts.delete(id);
+  async deletePost(id: string): Promise<boolean> {
+    try {
+      const result = await PostModel.findByIdAndDelete(id);
+      return result !== null;
+    } catch (error) {
+      console.error("Error deleting post:", error);
+      return false;
+    }
   }
 
-  async updatePostVotes(id: number, votes: number): Promise<Post | undefined> {
-    const post = this.posts.get(id);
-    if (!post) return undefined;
-    
-    const updatedPost: Post = {
-      ...post,
-      votes,
-      updatedAt: new Date(),
-    };
-    this.posts.set(id, updatedPost);
-    return updatedPost;
+  async updatePostVotes(id: string, votes: number): Promise<Post | undefined> {
+    try {
+      const post = await PostModel.findByIdAndUpdate(
+        id,
+        { votes, updatedAt: new Date() },
+        { new: true }
+      );
+      
+      if (!post) return undefined;
+      
+      return {
+        _id: post._id.toString(),
+        title: post.title,
+        content: post.content,
+        authorId: post.authorId.toString(),
+        votes: post.votes,
+        createdAt: post.createdAt,
+        updatedAt: post.updatedAt,
+      };
+    } catch (error) {
+      console.error("Error updating post votes:", error);
+      return undefined;
+    }
   }
 }
 
-export const storage = new MemStorage();
+export const storage = new MongoStorage();

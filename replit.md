@@ -1,8 +1,8 @@
-# Reddit Clone - Full Stack Application
+# Banddit Clone - Full Stack Application
 
 ## Overview
 
-This is a full-stack Reddit-style clone application built with React, TypeScript, and Express. The application features user authentication, post creation, voting, and real-time updates. It uses a modern tech stack with shadcn/ui components for the frontend and Drizzle ORM for database interactions.
+This is a full-stack Banddit-style clone application built with React, TypeScript, and Express. The application features user authentication, post creation, voting, and real-time updates. It uses a modern tech stack with shadcn/ui components for the frontend and MongoDB with Mongoose for database interactions.
 
 ## System Architecture
 
@@ -12,14 +12,14 @@ This is a full-stack Reddit-style clone application built with React, TypeScript
 - **Routing**: Wouter for client-side routing
 - **Data Fetching**: TanStack Query for server state management
 - **UI Components**: shadcn/ui component library with Radix UI primitives
-- **Styling**: Tailwind CSS with custom Reddit-themed variables
+- **Styling**: Tailwind CSS with custom Banddit-themed variables
 - **Build Tool**: Vite for development and production builds
 
 ### Backend Architecture
 - **Framework**: Express.js with TypeScript
-- **Database**: PostgreSQL with Drizzle ORM
+- **Database**: MongoDB with Mongoose ODM
 - **Authentication**: JWT tokens with bcrypt for password hashing
-- **Storage**: In-memory storage (MemStorage) for development, designed to work with PostgreSQL
+- **Storage**: MongoDB storage with full CRUD operations
 - **API Structure**: RESTful API with authentication middleware
 
 ## Key Components
@@ -44,9 +44,9 @@ This is a full-stack Reddit-style clone application built with React, TypeScript
 - Reddit-style theming with custom CSS variables
 
 ### Data Models
-- **Users**: id, username, email, password, timestamps
-- **Posts**: id, title, content, authorId, votes, timestamps
-- Relationship: Posts belong to Users (one-to-many)
+- **Users**: _id (ObjectId), username, email, password, createdAt
+- **Posts**: _id (ObjectId), title, content, authorId (ObjectId ref), votes, createdAt, updatedAt
+- Relationship: Posts belong to Users (one-to-many via ObjectId references)
 
 ## Data Flow
 
@@ -79,13 +79,13 @@ This is a full-stack Reddit-style clone application built with React, TypeScript
 
 ### Backend Dependencies
 - **Core**: Express.js, TypeScript
-- **Database**: @neondatabase/serverless, drizzle-orm, drizzle-kit
+- **Database**: mongodb, mongoose, @types/mongoose
 - **Authentication**: jsonwebtoken, bcryptjs
 - **Validation**: zod
 - **Development**: tsx, esbuild
 
 ### Development Tools
-- **Database**: Drizzle Kit for migrations and schema management
+- **Database**: MongoDB with Mongoose for schema management and ODM
 - **Build**: Vite for frontend, esbuild for backend
 - **Development**: Hot module replacement, runtime error overlay
 
@@ -108,14 +108,16 @@ This is a full-stack Reddit-style clone application built with React, TypeScript
 - `npm run db:push`: Apply database schema changes
 
 ### Database Setup
-- Drizzle ORM with PostgreSQL dialect
-- Schema defined in `shared/schema.ts`
-- Migrations stored in `migrations/` directory
-- Connection via Neon Database serverless driver
+- MongoDB with Mongoose ODM
+- Schema defined using Mongoose models in `server/models/`
+- User and Post models with proper relationships
+- Connection via standard MongoDB driver
 
 ## Changelog
 
 - July 08, 2025. Initial setup
+- July 08, 2025. Migrated from PostgreSQL/Drizzle to MongoDB/Mongoose with full CRUD implementation
+- July 08, 2025. Updated branding from "Reddit" to "Banddit" with community prefix changes (r/ → b/)
 
 ## User Preferences
 
