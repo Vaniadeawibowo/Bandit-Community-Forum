@@ -22,6 +22,9 @@ export interface IStorage {
 
 export class MongoStorage implements IStorage {
   private isConnected = false;
+  private memoryStorage = new Map<string, any>();
+  private userCounter = 1;
+  private postCounter = 1;
 
   constructor() {
     this.initConnection();
