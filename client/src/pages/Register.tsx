@@ -120,7 +120,7 @@ export default function Register() {
           </form>
           <div className="mt-6 text-center">
             <p className="text-sm text-reddit-gray">
-              Already a redditor?{" "}
+              Already a bandditor?{" "}
               <Link href="/login" className="text-reddit-blue hover:underline">
                 Log in
               </Link>

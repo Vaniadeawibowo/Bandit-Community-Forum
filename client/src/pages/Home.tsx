@@ -91,7 +91,7 @@ export default function Home() {
                       <span className="text-white text-xs font-bold">P</span>
                     </div>
                     <div className="flex-1">
-                      <p className="text-sm font-medium">r/programming</p>
+                      <p className="text-sm font-medium">b/programming</p>
                       <p className="text-xs text-reddit-gray">2.1M members</p>
                     </div>
                   </div>
@@ -100,7 +100,7 @@ export default function Home() {
                       <span className="text-white text-xs font-bold">J</span>
                     </div>
                     <div className="flex-1">
-                      <p className="text-sm font-medium">r/javascript</p>
+                      <p className="text-sm font-medium">b/javascript</p>
                       <p className="text-xs text-reddit-gray">1.8M members</p>
                     </div>
                   </div>
@@ -109,7 +109,7 @@ export default function Home() {
                       <span className="text-white text-xs font-bold">W</span>
                     </div>
                     <div className="flex-1">
-                      <p className="text-sm font-medium">r/webdev</p>
+                      <p className="text-sm font-medium">b/webdev</p>
                       <p className="text-xs text-reddit-gray">1.3M members</p>
                     </div>
                   </div>

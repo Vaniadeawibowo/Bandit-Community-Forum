@@ -44,7 +44,7 @@ export default function Login() {
           <div className="flex justify-center mb-4">
             <i className="fab fa-reddit-alien text-reddit-orange text-4xl"></i>
           </div>
-          <CardTitle className="text-2xl font-bold">Log in to Reddit</CardTitle>
+          <CardTitle className="text-2xl font-bold">Log in to Banddit</CardTitle>
           <p className="text-reddit-gray mt-2">
             By continuing, you agree to our User Agreement and Privacy Policy
           </p>
@@ -88,7 +88,7 @@ export default function Login() {
           </form>
           <div className="mt-6 text-center">
             <p className="text-sm text-reddit-gray">
-              New to Reddit?{" "}
+              New to Banddit?{" "}
               <Link href="/register" className="text-reddit-blue hover:underline">
                 Sign up
               </Link>

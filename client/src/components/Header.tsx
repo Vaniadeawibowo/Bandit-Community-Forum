@@ -24,13 +24,13 @@ export default function Header({ user, onCreatePost, onProfileClick }: HeaderPro
           <div className="flex items-center space-x-4">
             <div className="flex items-center space-x-2">
               <i className="fab fa-reddit-alien text-reddit-orange text-2xl"></i>
-              <span className="text-xl font-bold text-gray-900">reddit</span>
+              <span className="text-xl font-bold text-gray-900">Banddit</span>
             </div>
             <div className="hidden md:flex bg-reddit-light-gray rounded-lg px-4 py-2 w-96">
               <i className="fas fa-search text-reddit-gray mr-2 mt-1"></i>
               <input
                 type="text"
-                placeholder="Search Reddit"
+                placeholder="Search Banddit"
                 className="bg-transparent outline-none flex-1"
               />
             </div>

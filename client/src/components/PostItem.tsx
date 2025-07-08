@@ -85,7 +85,7 @@ export default function PostItem({ post, currentUser }: PostItemProps) {
             {/* Post Content */}
             <div className="flex-1 min-w-0">
               <div className="flex items-center space-x-2 text-xs text-reddit-gray mb-2">
-                <span>r/programming</span>
+                <span>b/programming</span>
                 <span>•</span>
                 <span>Posted by</span>
                 <span>u/{post.author.username}</span>
