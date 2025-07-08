@@ -25,6 +25,7 @@ export type LoginUser = z.infer<typeof loginUserSchema>;
 // MongoDB document types
 export interface User {
   _id: string;
+  id: string;
   username: string;
   password: string;
   email: string;
@@ -33,6 +34,7 @@ export interface User {
 
 export interface Post {
   _id: string;
+  id: string;
   title: string;
   content: string;
   authorId: string;
