@@ -37,7 +37,7 @@ export default function Home() {
   }
 
   return (
-    <div className="min-h-screen bg-reddit-light-gray">
+    <div className="min-h-screen bg-background">
       <Header
         user={user}
         onCreatePost={() => setIsCreateModalOpen(true)}
@@ -55,8 +55,8 @@ export default function Home() {
             ) : (
               <div className="space-y-4">
                 {posts.length === 0 ? (
-                  <div className="bg-white rounded-lg border border-reddit-border p-8 text-center">
-                    <h3 className="text-lg font-semibold text-gray-900 mb-2">No posts yet</h3>
+                  <div className="bg-card rounded-lg border border-reddit-border p-8 text-center">
+                    <h3 className="text-lg font-semibold text-foreground mb-2">No posts yet</h3>
                     <p className="text-reddit-gray">Be the first to create a post!</p>
                   </div>
                 ) : (
@@ -72,8 +72,8 @@ export default function Home() {
           <div className="lg:col-span-1">
             <div className="space-y-4">
               {/* Create Post Card */}
-              <div className="bg-white rounded-lg border border-reddit-border p-4">
-                <h3 className="text-lg font-semibold mb-3">Create a post</h3>
+              <div className="bg-card rounded-lg border border-reddit-border p-4">
+                <h3 className="text-lg font-semibold mb-3 text-foreground">Create a post</h3>
                 <button
                   onClick={() => setIsCreateModalOpen(true)}
                   className="w-full bg-reddit-orange text-white py-2 rounded-lg hover:bg-orange-600 transition-colors"

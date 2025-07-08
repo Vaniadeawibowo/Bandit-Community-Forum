@@ -62,7 +62,7 @@ export default function PostItem({ post, currentUser }: PostItemProps) {
 
   return (
     <>
-      <div className="bg-white rounded-lg border border-reddit-border hover:border-gray-300 transition-all">
+      <div className="bg-card rounded-lg border border-reddit-border hover:border-gray-500 transition-all">
         <div className="p-4">
           <div className="flex items-start space-x-3">
             {/* Vote Section */}
@@ -73,7 +73,7 @@ export default function PostItem({ post, currentUser }: PostItemProps) {
               >
                 <i className="fas fa-arrow-up text-lg"></i>
               </button>
-              <span className="text-sm font-medium text-gray-900">{post.votes}</span>
+              <span className="text-sm font-medium text-foreground">{post.votes}</span>
               <button
                 onClick={handleDownvote}
                 className="text-reddit-gray hover:text-reddit-blue transition-colors"
@@ -91,22 +91,22 @@ export default function PostItem({ post, currentUser }: PostItemProps) {
                 <span>u/{post.author.username}</span>
                 <span>{formatTimeAgo(post.createdAt)}</span>
               </div>
-              <h3 className="text-lg font-medium text-gray-900 mb-2 cursor-pointer hover:text-reddit-blue">
+              <h3 className="text-lg font-medium text-foreground mb-2 cursor-pointer hover:text-reddit-blue">
                 {post.title}
               </h3>
               <p className="text-reddit-gray text-sm mb-3">
                 {getSnippet(post.content)}
               </p>
               <div className="flex items-center space-x-4">
-                <button className="flex items-center space-x-1 text-reddit-gray hover:text-gray-900 transition-colors">
+                <button className="flex items-center space-x-1 text-reddit-gray hover:text-foreground transition-colors">
                   <i className="far fa-comment text-sm"></i>
                   <span className="text-sm">0 comments</span>
                 </button>
-                <button className="flex items-center space-x-1 text-reddit-gray hover:text-gray-900 transition-colors">
+                <button className="flex items-center space-x-1 text-reddit-gray hover:text-foreground transition-colors">
                   <i className="fas fa-share text-sm"></i>
                   <span className="text-sm">Share</span>
                 </button>
-                <button className="flex items-center space-x-1 text-reddit-gray hover:text-gray-900 transition-colors">
+                <button className="flex items-center space-x-1 text-reddit-gray hover:text-foreground transition-colors">
                   <i className="far fa-bookmark text-sm"></i>
                   <span className="text-sm">Save</span>
                 </button>

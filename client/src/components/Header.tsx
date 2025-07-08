@@ -18,20 +18,20 @@ export default function Header({ user, onCreatePost, onProfileClick }: HeaderPro
   };
 
   return (
-    <header className="bg-white border-b border-reddit-border sticky top-0 z-50">
+    <header className="bg-card border-b border-reddit-border sticky top-0 z-50">
       <div className="max-w-6xl mx-auto px-4 py-3">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-4">
             <div className="flex items-center space-x-2">
               <i className="fab fa-reddit-alien text-reddit-orange text-2xl"></i>
-              <span className="text-xl font-bold text-gray-900">Banddit</span>
+              <span className="text-xl font-bold text-foreground">Banddit</span>
             </div>
-            <div className="hidden md:flex bg-reddit-light-gray rounded-lg px-4 py-2 w-96">
+            <div className="hidden md:flex bg-input rounded-lg px-4 py-2 w-96">
               <i className="fas fa-search text-reddit-gray mr-2 mt-1"></i>
               <input
                 type="text"
                 placeholder="Search Banddit"
-                className="bg-transparent outline-none flex-1"
+                className="bg-transparent outline-none flex-1 text-foreground placeholder:text-reddit-gray"
               />
             </div>
           </div>
@@ -45,14 +45,14 @@ export default function Header({ user, onCreatePost, onProfileClick }: HeaderPro
             <div className="relative">
               <button
                 onClick={onProfileClick}
-                className="flex items-center space-x-2 bg-reddit-light-gray px-3 py-2 rounded-lg hover:bg-gray-200 transition-colors"
+                className="flex items-center space-x-2 bg-muted px-3 py-2 rounded-lg hover:bg-accent transition-colors"
               >
                 <div className="w-8 h-8 bg-reddit-orange rounded-full flex items-center justify-center">
                   <span className="text-white font-medium text-sm">
                     {getUserInitials(user.username)}
                   </span>
                 </div>
-                <span className="hidden md:block text-sm font-medium">
+                <span className="hidden md:block text-sm font-medium text-foreground">
                   {user.username}
                 </span>
                 <i className="fas fa-chevron-down text-xs text-reddit-gray"></i>
