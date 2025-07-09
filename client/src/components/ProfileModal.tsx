@@ -3,6 +3,7 @@ import { AppDispatch } from "../store/store";
 import { logout } from "../store/authSlice";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
+import { User, Settings, Moon, LogOut } from "lucide-react";
 
 interface User {
   id: string;
@@ -39,45 +40,45 @@ export default function ProfileModal({ isOpen, onClose, user }: ProfileModalProp
               </span>
             </div>
             <div>
-              <h3 className="font-semibold">{user.username}</h3>
-              <p className="text-sm text-reddit-gray">u/{user.username}</p>
+              <h3 className="font-semibold text-foreground">{user.username}</h3>
+              <p className="text-sm text-muted-foreground">u/{user.username}</p>
             </div>
           </div>
           <div className="grid grid-cols-3 gap-4 text-center">
             <div>
-              <div className="text-lg font-semibold">0</div>
-              <div className="text-xs text-reddit-gray">Posts</div>
+              <div className="text-lg font-semibold text-foreground">0</div>
+              <div className="text-xs text-muted-foreground">Posts</div>
             </div>
             <div>
-              <div className="text-lg font-semibold">0</div>
-              <div className="text-xs text-reddit-gray">Karma</div>
+              <div className="text-lg font-semibold text-foreground">0</div>
+              <div className="text-xs text-muted-foreground">Karma</div>
             </div>
             <div>
-              <div className="text-lg font-semibold">0d</div>
-              <div className="text-xs text-reddit-gray">Cake Day</div>
+              <div className="text-lg font-semibold text-foreground">0d</div>
+              <div className="text-xs text-muted-foreground">Cake Day</div>
             </div>
           </div>
         </div>
         <div className="p-6 space-y-3">
-          <button className="w-full flex items-center space-x-3 p-3 hover:bg-reddit-light-gray rounded-lg transition-colors">
-            <i className="fas fa-user text-reddit-gray"></i>
+          <button className="w-full flex items-center space-x-3 p-3 hover:bg-muted rounded-lg transition-colors text-foreground">
+            <User size={16} className="text-muted-foreground" />
             <span>My Profile</span>
           </button>
-          <button className="w-full flex items-center space-x-3 p-3 hover:bg-reddit-light-gray rounded-lg transition-colors">
-            <i className="fas fa-cog text-reddit-gray"></i>
+          <button className="w-full flex items-center space-x-3 p-3 hover:bg-muted rounded-lg transition-colors text-foreground">
+            <Settings size={16} className="text-muted-foreground" />
             <span>User Settings</span>
           </button>
-          <button className="w-full flex items-center space-x-3 p-3 hover:bg-reddit-light-gray rounded-lg transition-colors">
-            <i className="fas fa-moon text-reddit-gray"></i>
+          <button className="w-full flex items-center space-x-3 p-3 hover:bg-muted rounded-lg transition-colors text-foreground">
+            <Moon size={16} className="text-muted-foreground" />
             <span>Dark Mode</span>
           </button>
           <hr className="border-reddit-border" />
           <Button
             onClick={handleLogout}
             variant="ghost"
-            className="w-full flex items-center space-x-3 p-3 hover:bg-red-50 text-red-600 justify-start"
+            className="w-full flex items-center space-x-3 p-3 hover:bg-red-900 text-red-400 hover:text-red-300 justify-start"
           >
-            <i className="fas fa-sign-out-alt"></i>
+            <LogOut size={16} />
             <span>Log Out</span>
           </Button>
         </div>
