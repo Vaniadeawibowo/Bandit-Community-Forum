@@ -13,6 +13,12 @@ export const insertPostSchema = z.object({
   authorId: z.string(),
 });
 
+export const insertCommentSchema = z.object({
+  content: z.string().min(1),
+  authorId: z.string(),
+  postId: z.string(),
+});
+
 export const loginUserSchema = z.object({
   username: z.string().min(1),
   password: z.string().min(1),
@@ -20,6 +26,7 @@ export const loginUserSchema = z.object({
 
 export type InsertUser = z.infer<typeof insertUserSchema>;
 export type InsertPost = z.infer<typeof insertPostSchema>;
+export type InsertComment = z.infer<typeof insertCommentSchema>;
 export type LoginUser = z.infer<typeof loginUserSchema>;
 
 // MongoDB document types
@@ -39,6 +46,19 @@ export interface Post {
   content: string;
   authorId: string;
   votes: number;
+  userVote?: number; // -1, 0, or 1
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export interface Comment {
+  _id: string;
+  id: string;
+  content: string;
+  authorId: string;
+  postId: string;
+  votes: number;
+  userVote?: number; // -1, 0, or 1
   createdAt: Date;
   updatedAt: Date;
 }

@@ -1,6 +1,8 @@
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../store/store";
 import { logout } from "../store/authSlice";
+import { clearPosts } from "../store/postsSlice";
+import { clearComments } from "../store/commentsSlice";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { User, Settings, Moon, LogOut } from "lucide-react";
@@ -22,6 +24,8 @@ export default function ProfileModal({ isOpen, onClose, user }: ProfileModalProp
 
   const handleLogout = () => {
     dispatch(logout());
+    dispatch(clearPosts());
+    dispatch(clearComments());
     onClose();
   };
 

@@ -1,10 +1,12 @@
-import { useState } from "react";
-import { useDispatch } from "react-redux";
-import { AppDispatch } from "../store/store";
+import { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "../store/store";
 import { deletePost, votePost } from "../store/postsSlice";
+import { fetchComments } from "../store/commentsSlice";
 import { Button } from "@/components/ui/button";
 import { ArrowUp, ArrowDown, MessageCircle, Share, Bookmark, Edit, Trash2 } from "lucide-react";
 import CreatePostModal from "./CreatePostModal";
+import CommentSection from "./CommentSection";
 
 interface User {
   id: string;
@@ -30,14 +32,34 @@ interface PostItemProps {
 
 export default function PostItem({ post, currentUser }: PostItemProps) {
   const dispatch = useDispatch<AppDispatch>();
+  const { comments: allComments } = useSelector((state: RootState) => state.comments);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [showComments, setShowComments] = useState(false);
+  
+  const comments = allComments[post.id] || [];
+  const commentCount = comments.length;
+  
+  // Always fetch comments on mount to get accurate count
+  useEffect(() => {
+    dispatch(fetchComments(post.id));
+  }, [dispatch, post.id]);
+  
+  useEffect(() => {
+    if (showComments) {
+      dispatch(fetchComments(post.id));
+    }
+  }, [dispatch, post.id, showComments]);
 
   const handleUpvote = () => {
-    dispatch(votePost({ id: post.id, votes: post.votes + 1 }));
+    const newVote = post.userVote === 1 ? 0 : 1;
+    const voteChange = newVote - (post.userVote || 0);
+    dispatch(votePost({ id: post.id, votes: post.votes + voteChange, voteType: newVote }));
   };
 
   const handleDownvote = () => {
-    dispatch(votePost({ id: post.id, votes: post.votes - 1 }));
+    const newVote = post.userVote === -1 ? 0 : -1;
+    const voteChange = newVote - (post.userVote || 0);
+    dispatch(votePost({ id: post.id, votes: post.votes + voteChange, voteType: newVote }));
   };
 
   const handleDelete = () => {
@@ -70,14 +92,25 @@ export default function PostItem({ post, currentUser }: PostItemProps) {
             <div className="flex flex-col items-center space-y-1 min-w-0">
               <button
                 onClick={handleUpvote}
-                className="text-muted-foreground hover:text-reddit-orange transition-colors"
+                className={`transition-colors ${
+                  post.userVote === 1 
+                    ? 'text-red-500 hover:text-red-600' 
+                    : 'text-muted-foreground hover:text-red-500'
+                }`}
               >
                 <ArrowUp size={18} />
               </button>
-              <span className="text-sm font-medium text-foreground">{post.votes}</span>
+              <span className={`text-sm font-medium ${
+                post.votes > 0 ? 'text-red-500' :
+                post.votes < 0 ? 'text-blue-500' : 'text-foreground'
+              }`}>{post.votes}</span>
               <button
                 onClick={handleDownvote}
-                className="text-muted-foreground hover:text-reddit-blue transition-colors"
+                className={`transition-colors ${
+                  post.userVote === -1 
+                    ? 'text-blue-500 hover:text-blue-600' 
+                    : 'text-muted-foreground hover:text-blue-500'
+                }`}
               >
                 <ArrowDown size={18} />
               </button>
@@ -91,6 +124,12 @@ export default function PostItem({ post, currentUser }: PostItemProps) {
                 <span>Posted by</span>
                 <span>u/{post.author.username}</span>
                 <span>{formatTimeAgo(post.createdAt)}</span>
+                {post.createdAt !== post.updatedAt && (
+                  <>
+                    <span>•</span>
+                    <span>Edited</span>
+                  </>
+                )}
               </div>
               <h3 className="text-lg font-medium text-foreground mb-2 cursor-pointer hover:text-reddit-blue">
                 {post.title}
@@ -99,9 +138,12 @@ export default function PostItem({ post, currentUser }: PostItemProps) {
                 {getSnippet(post.content)}
               </p>
               <div className="flex items-center space-x-4">
-                <button className="flex items-center space-x-1 text-muted-foreground hover:text-foreground transition-colors">
+                <button 
+                  onClick={() => setShowComments(!showComments)}
+                  className="flex items-center space-x-1 text-muted-foreground hover:text-foreground transition-colors"
+                >
                   <MessageCircle size={14} />
-                  <span className="text-sm">0 comments</span>
+                  <span className="text-sm">{commentCount} comments</span>
                 </button>
                 <button className="flex items-center space-x-1 text-muted-foreground hover:text-foreground transition-colors">
                   <Share size={14} />
@@ -133,6 +175,13 @@ export default function PostItem({ post, currentUser }: PostItemProps) {
             </div>
           </div>
         </div>
+        
+        {/* Comment Section */}
+        {showComments && (
+          <div className="px-4 pb-4">
+            <CommentSection postId={post.id} user={currentUser} />
+          </div>
+        )}
       </div>
 
       <CreatePostModal

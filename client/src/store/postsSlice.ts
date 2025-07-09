@@ -13,6 +13,7 @@ interface Post {
   content: string;
   authorId: string;
   votes: number;
+  userVote?: number;
   createdAt: string;
   updatedAt: string;
   author: User;
@@ -99,7 +100,7 @@ export const deletePost = createAsyncThunk(
 
 export const votePost = createAsyncThunk(
   "posts/votePost",
-  async ({ id, votes }: { id: string; votes: number }) => {
+  async ({ id, votes, voteType }: { id: string; votes: number; voteType: number }) => {
     const token = localStorage.getItem("token");
     const response = await fetch(`/api/posts/${id}/vote`, {
       method: "POST",
@@ -107,7 +108,7 @@ export const votePost = createAsyncThunk(
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
       },
-      body: JSON.stringify({ votes }),
+      body: JSON.stringify({ voteType }),
     });
     
     if (!response.ok) {
@@ -124,6 +125,11 @@ const postsSlice = createSlice({
   reducers: {
     clearError: (state) => {
       state.error = null;
+    },
+    clearPosts: (state) => {
+      state.posts = [];
+      state.error = null;
+      state.isLoading = false;
     },
   },
   extraReducers: (builder) => {
@@ -155,11 +161,11 @@ const postsSlice = createSlice({
       .addCase(votePost.fulfilled, (state, action) => {
         const index = state.posts.findIndex(post => post.id === action.payload.id);
         if (index !== -1) {
-          state.posts[index].votes = action.payload.votes;
+          state.posts[index] = action.payload;
         }
       });
   },
 });
 
-export const { clearError } = postsSlice.actions;
+export const { clearError, clearPosts } = postsSlice.actions;
 export default postsSlice.reducer;

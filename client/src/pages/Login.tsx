@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import Spinner from "../components/Spinner";
+import BandditLogo from "../assets/Banddit.png";
 
 export default function Login() {
   const [, setLocation] = useLocation();
@@ -42,10 +43,10 @@ export default function Login() {
       <Card className="w-full max-w-md">
         <CardHeader className="text-center">
           <div className="flex justify-center mb-4">
-            <i className="fab fa-reddit-alien text-reddit-orange text-4xl"></i>
+            <img src={BandditLogo} alt="Banddit" className="w-16 h-16" />
           </div>
           <CardTitle className="text-2xl font-bold">Log in to Banddit</CardTitle>
-          <p className="text-reddit-gray mt-2">
+          <p className="text-muted-foreground mt-2">
             By continuing, you agree to our User Agreement and Privacy Policy
           </p>
         </CardHeader>
@@ -87,7 +88,7 @@ export default function Login() {
             </Button>
           </form>
           <div className="mt-6 text-center">
-            <p className="text-sm text-reddit-gray">
+            <p className="text-sm text-muted-foreground">
               New to Banddit?{" "}
               <Link href="/register" className="text-reddit-blue hover:underline">
                 Sign up

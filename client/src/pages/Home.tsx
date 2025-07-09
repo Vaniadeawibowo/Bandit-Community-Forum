@@ -31,7 +31,14 @@ export default function Home() {
     if (user) {
       dispatch(fetchPosts());
     }
-  }, [user, dispatch]);
+  }, [user?.id, dispatch]);
+  
+  // Always fetch posts when component mounts with a user
+  useEffect(() => {
+    if (user && token) {
+      dispatch(fetchPosts());
+    }
+  }, [token, dispatch]);
 
   if (!user) {
     return <Spinner />;

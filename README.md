@@ -5,12 +5,13 @@ A modern, full-stack Reddit-style community forum built with React, TypeScript, 
 ## 🚀 Features
 
 - **User Authentication**: Secure JWT-based registration and login
-- **Post Management**: Create, read, update, and delete posts
-- **Voting System**: Upvote and downvote posts
+- **Post Management**: Create, read, update, and delete posts with edit indicators
+- **Comment System**: Full CRUD operations for comments with nested display
+- **Voting System**: Upvote and downvote posts and comments
 - **Dark Theme**: Modern dark UI with responsive design
-- **Real-time Updates**: Live post interactions
-- **MongoDB Integration**: Persistent data storage
-- **RESTful API**: Complete CRUD operations
+- **Real-time Updates**: Live post and comment interactions
+- **MongoDB Integration**: Persistent data storage with proper relationships
+- **RESTful API**: Complete CRUD operations for all entities
 
 ## 🛠️ Tech Stack
 
@@ -115,6 +116,13 @@ Banddit/
 - `DELETE /api/posts/:id` - Delete post (auth required)
 - `POST /api/posts/:id/vote` - Vote on post (auth required)
 
+### Comments
+- `GET /api/posts/:postId/comments` - Get comments for a post
+- `POST /api/posts/:postId/comments` - Create new comment (auth required)
+- `PUT /api/comments/:id` - Update comment (auth required)
+- `DELETE /api/comments/:id` - Delete comment (auth required)
+- `POST /api/comments/:id/vote` - Vote on comment (auth required)
+
 ## 🧪 Testing with Postman
 
 1. Register/Login to get JWT token
@@ -125,10 +133,12 @@ Banddit/
 ## 🎨 UI Components
 
 - **Header**: Navigation with logo, search, and user profile
-- **PostItem**: Individual post display with voting
+- **PostItem**: Individual post display with voting and comment toggle
+- **CommentSection**: Nested comment display with voting and CRUD operations
 - **CreatePostModal**: Post creation/editing form
 - **ProfileModal**: User profile management
 - **Popular Communities**: Sidebar community list
+- **Spinner**: Loading states with theme-aware styling
 
 ## 🔧 Development Scripts
 
@@ -141,24 +151,31 @@ Banddit/
 
 - ✅ User registration and authentication
 - ✅ JWT token-based security
-- ✅ Post CRUD operations
-- ✅ Voting system
-- ✅ Dark theme UI
-- ✅ Responsive design
-- ✅ MongoDB integration
-- ✅ TypeScript throughout
-- ✅ Error handling
-- ✅ Input validation
+- ✅ Post CRUD operations with edit indicators
+- ✅ Comment system with full CRUD operations
+- ✅ Voting system for posts and comments
+- ✅ Dark theme UI with consistent styling
+- ✅ Responsive design for all screen sizes
+- ✅ MongoDB integration with proper relationships
+- ✅ TypeScript throughout for type safety
+- ✅ Error handling and loading states
+- ✅ Input validation and authorization
+- ✅ Real-time comment counts and updates
+- ✅ Edit indicators for modified content
+- ✅ State management with Redux Toolkit
 
 ## 🚀 Future Enhancements
 
-- [ ] Comment system
+- [ ] Nested comment replies
 - [ ] Real-time notifications
 - [ ] Image upload support
 - [ ] Search functionality
-- [ ] User profiles
-- [ ] Community creation
+- [ ] Advanced user profiles
+- [ ] Community creation and management
 - [ ] Email verification
+- [ ] Comment sorting options
+- [ ] Post categories and tags
+- [ ] User karma system
 
 ## 🤝 Contributing
 

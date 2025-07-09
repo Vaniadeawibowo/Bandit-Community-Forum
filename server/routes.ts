@@ -1,7 +1,7 @@
 import type { Express, Request, Response, NextFunction } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
-import { insertUserSchema, insertPostSchema, loginUserSchema } from "@shared/schema";
+import { insertUserSchema, insertPostSchema, insertCommentSchema, loginUserSchema } from "@shared/schema";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
 
@@ -116,9 +116,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Posts routes
-  app.get("/api/posts", async (req, res) => {
+  app.get("/api/posts", authenticateToken, async (req, res) => {
     try {
-      const posts = await storage.getAllPosts();
+      const userId = req.user?.userId;
+      const posts = await storage.getAllPostsWithUserVotes(userId);
       res.json(posts);
     } catch (error) {
       res.status(500).json({ message: "Internal server error" });
@@ -202,14 +203,122 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.post("/api/posts/:id/vote", authenticateToken, async (req, res) => {
     try {
       const id = req.params.id;
-      const { votes } = req.body;
+      const { voteType } = req.body;
+      const userId = req.user.userId;
       
-      const updatedPost = await storage.updatePostVotes(id, votes);
+      const updatedPost = await storage.votePost(id, userId, voteType);
       if (!updatedPost) {
         return res.status(404).json({ message: "Post not found" });
       }
 
       res.json(updatedPost);
+    } catch (error) {
+      res.status(500).json({ message: "Internal server error" });
+    }
+  });
+
+  // Comment routes
+  app.get("/api/posts/:postId/comments", authenticateToken, async (req, res) => {
+    try {
+      const { postId } = req.params;
+      const userId = req.user?.userId;
+      const comments = await storage.getCommentsByPostWithUserVotes(postId, userId);
+      res.json(comments);
+    } catch (error) {
+      res.status(500).json({ message: "Internal server error" });
+    }
+  });
+
+  app.post("/api/posts/:postId/comments", authenticateToken, async (req, res) => {
+    try {
+      const { postId } = req.params;
+      const userId = req.user.userId;
+      const validatedData = insertCommentSchema.parse({
+        ...req.body,
+        authorId: userId,
+        postId,
+      });
+      
+      const comment = await storage.createComment(validatedData);
+      // Fetch the complete comment with author and vote data
+      const comments = await storage.getCommentsByPostWithUserVotes(postId, userId);
+      const fullComment = comments.find(c => c.id === comment.id);
+      
+      res.status(201).json(fullComment || comment);
+    } catch (error) {
+      res.status(400).json({ message: "Invalid input data" });
+    }
+  });
+
+  app.put("/api/comments/:id", authenticateToken, async (req, res) => {
+    try {
+      const { id } = req.params;
+      const userId = req.user.userId;
+      
+      // Check if user owns the comment
+      const comment = await storage.getComment(id);
+      if (!comment) {
+        return res.status(404).json({ message: "Comment not found" });
+      }
+      
+      if (comment.authorId !== userId) {
+        return res.status(403).json({ message: "Not authorized to edit this comment" });
+      }
+      
+      const validatedData = insertCommentSchema.omit({ authorId: true, postId: true }).parse(req.body);
+      const updatedComment = await storage.updateComment(id, validatedData);
+      
+      if (!updatedComment) {
+        return res.status(404).json({ message: "Comment not found" });
+      }
+      
+      // Fetch the complete comment with author data
+      const fullComment = await storage.getComment(id);
+      res.json(fullComment || updatedComment);
+    } catch (error) {
+      res.status(400).json({ message: "Invalid input data" });
+    }
+  });
+
+  app.delete("/api/comments/:id", authenticateToken, async (req, res) => {
+    try {
+      const { id } = req.params;
+      const userId = req.user.userId;
+      
+      // Get the specific comment to check ownership
+      const comment = await storage.getComment(id);
+      
+      if (!comment) {
+        return res.status(404).json({ message: "Comment not found" });
+      }
+      
+      if (comment.authorId !== userId) {
+        return res.status(403).json({ message: "Not authorized to delete this comment" });
+      }
+      
+      const success = await storage.deleteComment(id);
+      if (!success) {
+        return res.status(404).json({ message: "Comment not found" });
+      }
+      
+      res.json({ message: "Comment deleted successfully" });
+    } catch (error) {
+      res.status(500).json({ message: "Internal server error" });
+    }
+  });
+
+  app.post("/api/comments/:id/vote", authenticateToken, async (req, res) => {
+    try {
+      const { id } = req.params;
+      const { voteType } = req.body;
+      const userId = req.user.userId;
+      
+      const updatedComment = await storage.voteComment(id, userId, voteType);
+      if (!updatedComment) {
+        return res.status(404).json({ message: "Comment not found" });
+      }
+      
+      res.json(updatedComment);
     } catch (error) {
       res.status(500).json({ message: "Internal server error" });
     }

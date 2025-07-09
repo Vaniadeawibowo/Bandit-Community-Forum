@@ -19,20 +19,10 @@ const postSchema = new mongoose.Schema({
     type: Number,
     default: 0,
   },
-  createdAt: {
-    type: Date,
-    default: Date.now,
-  },
-  updatedAt: {
-    type: Date,
-    default: Date.now,
-  },
+}, {
+  timestamps: true
 });
 
-// Update the updatedAt field before saving
-postSchema.pre("save", function (next) {
-  this.updatedAt = new Date();
-  next();
-});
+// Remove pre-save middleware to prevent new posts showing as edited
 
 export default mongoose.models.Post || mongoose.model("Post", postSchema);
